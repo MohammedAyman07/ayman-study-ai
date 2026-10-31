@@ -79,16 +79,6 @@ async function callGroq(
   let selectedModel = model;
   const content: any[] = [{ type: 'text', text: prompt }];
 
-  if (image) {
-    content.push({
-      type: 'image_url',
-      image_url: { url: `data:${mimeType};base64,${image}` },
-    });
-    if (!selectedModel.toLowerCase().includes('vision') && !selectedModel.toLowerCase().includes('llava')) {
-      selectedModel = 'llama-3.2-11b-vision-preview';
-    }
-  }
-
   const enhancedSystem = `${systemInstruction}\n\nCRITICAL INSTRUCTION: You MUST provide an extremely detailed, logically structured, and perfect answer. Expand extensively on every point to ensure the highest quality response comparable to a premium large language model.`;
 
   const response = await fetchWithTimeout('https://api.groq.com/openai/v1/chat/completions', {
@@ -300,16 +290,26 @@ export default async function handler(req: any, res: any) {
     const openRouterKey = process.env.OPENROUTER_API_KEY || '';
     const huggingFaceKey = process.env.HUGGINGFACE_API_KEY || '';
 
-    // Multi-Model Failover Plan
-    const models = [
-      { provider: 'groq', name: 'llama-3.3-70b-versatile' },
-      { provider: 'google', name: 'gemini-2.0-flash' },
-      { provider: 'google', name: 'gemini-1.5-flash' },
-      { provider: 'openrouter', name: 'google/gemini-1.5-flash:free' },
-      { provider: 'openrouter', name: 'meta-llama/llama-3.1-8b-instruct:free' },
-      { provider: 'openrouter', name: 'mistralai/mistral-7b-instruct:free' },
-      { provider: 'huggingface', name: 'Qwen/Qwen2.5-Coder-32B-Instruct' },
-    ];
+    // Dynamic Multi-Model Failover Plan
+    // If an image is provided, prioritize Google Gemini multimodal vision models.
+    const models = image
+      ? [
+          { provider: 'google', name: 'gemini-3.5-flash-lite' },
+          { provider: 'google', name: 'gemini-flash-latest' },
+          { provider: 'google', name: 'gemini-3.8-flash' },
+          { provider: 'huggingface', name: 'Qwen/Qwen2-VL-7B-Instruct' },
+        ]
+      : [
+          // Ultra-Fast Groq models verified live
+          { provider: 'groq', name: 'openai/gpt-oss-120b' },
+          { provider: 'groq', name: 'qwen/qwen3.8-27b' },
+          { provider: 'groq', name: 'openai/gpt-oss-20b' },
+          // Google Gemini models verified live
+          { provider: 'google', name: 'gemini-3.5-flash-lite' },
+          { provider: 'google', name: 'gemini-flash-latest' },
+          { provider: 'google', name: 'gemini-3.8-flash' },
+          { provider: 'google', name: 'gemma-4-26b-a4b-it' },
+        ];
 
     let lastError = '';
 
