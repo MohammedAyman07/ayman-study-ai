@@ -2,7 +2,7 @@
 
 > **An enterprise-grade, multi-model AI academic tutoring and exam preparation platform built with React 19, TypeScript, Vite, and serverless LLM orchestration.**
 
-[![Vercel Deployment](https://img.shields.io/badge/Deployed%20with-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohammedAyman07%2Fayman-study-ai&env=GEMINI_API_KEY,GROQ_API_KEY,RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET,VITE_RAZORPAY_KEY_ID,VITE_GOOGLE_CLIENT_ID)
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4.1-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
