@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "question": "An electron moves on a straight line path XY as shown in the figure. The coil abcd is adjacent to the path of the electron. What will be the direction of current, if any, induced in the coil?",
+    "options": [
+      "(a) The current will reverse its direction as the electron goes past the coil",
+      "(b) No current will be induced",
+      "(c) abcd",
+      "(d) adcb"
+    ],
+    "answer": "(a) The current will reverse its direction as the electron goes past the coil"
+  },
+  {
+    "id": 2,
+    "question": "A thin semi-circular conducting ring (PQR) of radius r is falling with its plane vertical in a horizontal magnetic field B, as shown in the figure. The potential difference developed across the ring when its speed v, is",
+    "options": [
+      "(a) Zero",
+      "(b) \\(\\frac{Bv\\pi r^2}{2}\\) and P is at higher potential",
+      "(c) \\(\\pi r Bv\\) and R is at higher potential",
+      "(d) \\(2rBv\\) and R is at higher potential"
+    ],
+    "answer": "(d) \\(2rBv\\) and R is at higher potential"
+  },
+  {
+    "id": 3,
+    "question": "The flux linked with a coil at any instant t is given by \\(\\Phi_B = 10t^2 - 50t + 250\\). The induced emf at t = 3 s is",
+    "options": [
+      "(a) -190 V",
+      "(b) -10 V",
+      "(c) 10 V",
+      "(d) 190 V"
+    ],
+    "answer": "(b) -10 V"
+  },
+  {
+    "id": 4,
+    "question": "When the current changes from +2A to -2A in 0.05 s, an emf of 8 V is induced in a coil. The co-efficient of self-induction of the coil is",
+    "options": [
+      "(a) 0.2 H",
+      "(b) 0.4 H",
+      "(c) 0.8 H",
+      "(d) 0.1 H"
+    ],
+    "answer": "(d) 0.1 H"
+  },
+  {
+    "id": 5,
+    "question": "The current i flowing in a coil varies with time as shown in the figure. The variation of induced emf with time would be",
+    "options": [
+      "(a) Graph a",
+      "(b) Graph b",
+      "(c) Graph c",
+      "(d) Graph d"
+    ],
+    "answer": "(a) Graph a"
+  },
+  {
+    "id": 6,
+    "question": "A circular coil with a cross-sectional area of \\(4\\text{ cm}^2\\) has 10 turns. It is placed at the centre of a long solenoid that has 15 turns/cm and a cross-sectional area of \\(10\\text{ cm}^2\\). The axis of the coil coincides with the axis of the solenoid. What is their mutual inductance?",
+    "options": [
+      "(a) \\(7.54\\ \\mu\\text{H}\\)",
+      "(b) \\(8.54\\ \\mu\\text{H}\\)",
+      "(c) \\(9.54\\ \\mu\\text{H}\\)",
+      "(d) \\(10.54\\ \\mu\\text{H}\\)"
+    ],
+    "answer": "(a) \\(7.54\\ \\mu\\text{H}\\)"
+  },
+  {
+    "id": 7,
+    "question": "In a transformer, the number of turns in the primary and the secondary are 410 and 1230 respectively. If the current in primary is 6A, then that in the secondary coil is",
+    "options": [
+      "(a) 2 A",
+      "(b) 18 A",
+      "(c) 12 A",
+      "(d) 1 A"
+    ],
+    "answer": "(a) 2 A"
+  },
+  {
+    "id": 8,
+    "question": "A step-down transformer reduces the supply voltage from 220 V to 11 V and increase the current from 6 A to 100 A. Then its efficiency is",
+    "options": [
+      "(a) 1.2",
+      "(b) 0.83",
+      "(c) 0.12",
+      "(d) 0.9"
+    ],
+    "answer": "(b) 0.83"
+  },
+  {
+    "id": 9,
+    "question": "In an electrical circuit, R, L, C and AC voltage source are all connected in series. When L is removed from the circuit, the phase difference between the voltage and current in the circuit is \\(\\pi/3\\). Instead, if C is removed from the circuit, the phase difference is again \\(\\pi/3\\). The power factor of the circuit is",
+    "options": [
+      "(a) 1/2",
+      "(b) \\(1/\\sqrt{2}\\)",
+      "(c) 1",
+      "(d) \\(\\sqrt{3}/2\\)"
+    ],
+    "answer": "(c) 1"
+  },
+  {
+    "id": 10,
+    "question": "In a series RL circuit, the resistance and inductive reactance are the same. Then the phase difference between the voltage and current in the circuit is",
+    "options": [
+      "(a) \\(\\pi/4\\)",
+      "(b) \\(\\pi/2\\)",
+      "(c) \\(\\pi/6\\)",
+      "(d) zero"
+    ],
+    "answer": "(a) \\(\\pi/4\\)"
+  },
+  {
+    "id": 11,
+    "question": "In a series resonant RLC circuit, the voltage across \\(100\\ \\Omega\\) resistor is 40 V. The resonant frequency \\(\\omega\\) is \\(250\\text{ rad/s}\\). If the value of C is \\(4\\ \\mu\\text{F}\\), then the voltage across L is",
+    "options": [
+      "(a) 600 V",
+      "(b) 4000 V",
+      "(c) 400 V",
+      "(d) 1 V"
+    ],
+    "answer": "(c) 400 V"
+  },
+  {
+    "id": 12,
+    "question": "An inductor 20 mH, a capacitor \\(50\\ \\mu\\text{F}\\) and a resistor \\(40\\ \\Omega\\) are connected in series across a source of emf \\(V = 10 \\sin 340 t\\). The power loss in AC circuit is",
+    "options": [
+      "(a) 0.76 W",
+      "(b) 0.89 W",
+      "(c) 0.46 W",
+      "(d) 0.67 W"
+    ],
+    "answer": "(c) 0.46 W"
+  },
+  {
+    "id": 13,
+    "question": "The instantaneous values of alternating current and voltage in a circuit are \\(i = \\frac{1}{\\sqrt{2}}\\sin(100\\pi t)\\text{ A}\\) and \\(v = \\frac{1}{\\sqrt{2}}\\sin(100\\pi t + \\frac{\\pi}{3})\\text{ V}\\). The average power in watts consumed in the circuit is",
+    "options": [
+      "(a) 1/4",
+      "(b) \\(\\sqrt{3}/4\\)",
+      "(c) 1/2",
+      "(d) 1/8"
+    ],
+    "answer": "(d) 1/8"
+  },
+  {
+    "id": 14,
+    "question": "In an oscillating LC circuit, the maximum charge on the capacitor is Q. The charge on the capacitor when the energy is stored equally between the electric and magnetic fields is",
+    "options": [
+      "(a) \\(Q/2\\)",
+      "(b) \\(Q/\\sqrt{3}\\)",
+      "(c) \\(Q/\\sqrt{2}\\)",
+      "(d) Q"
+    ],
+    "answer": "(c) \\(Q/\\sqrt{2}\\)"
+  },
+  {
+    "id": 15,
+    "question": "\\(\\frac{20}{\\pi^2}\\text{H}\\) inductor is connected to a capacitor of capacitance C. The value of C in order to impart maximum power at 50 Hz is",
+    "options": [
+      "(a) \\(50\\ \\mu\\text{F}\\)",
+      "(b) \\(0.5\\ \\mu\\text{F}\\)",
+      "(c) \\(500\\ \\mu\\text{F}\\)",
+      "(d) \\(5\\ \\mu\\text{F}\\)"
+    ],
+    "answer": "(d) \\(5\\ \\mu\\text{F}\\)"
+  }
+]

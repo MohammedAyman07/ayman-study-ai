@@ -1,0 +1,19 @@
+Options -MultiViews
+RewriteEngine On
+
+# --- Pass Authorization header for PHP API ---
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+# --- Serve existing PHP/asset files directly ---
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# --- Block sensitive files from being publicly served ---
+RewriteRule ^\.env$ - [F,L]
+RewriteRule ^db\.php$ - [F,L]
+RewriteRule ^database\.sql$ - [F,L]
+
+# --- React SPA fallback: all other routes → index.html ---
+RewriteRule ^ index.html [L]

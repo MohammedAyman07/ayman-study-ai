@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "question": "Two identical point charges of magnitude -q are fixed as shown in the figure below. A third charge +q is placed midway between the two charges at the point P. Suppose this charge +q is displaced a small distance from the point P in the directions indicated by the arrows, in which direction(s) will +q be stable with respect to the displacement?",
+    "options": [
+      "(a) A1 and A2",
+      "(b) B1 and B2",
+      "(c) both directions",
+      "(d) No stable"
+    ],
+    "answer": "(b) B1 and B2"
+  },
+  {
+    "id": 2,
+    "question": "Which charge configuration produces a uniform electric field?",
+    "options": [
+      "(a) point charge",
+      "(b) uniformly charged infinite line",
+      "(c) uniformly charged infinite plane",
+      "(d) uniformly charged spherical shell"
+    ],
+    "answer": "(c) uniformly charged infinite plane"
+  },
+  {
+    "id": 3,
+    "question": "What is the ratio of the charges |q1/q2| for the following electric field line pattern?",
+    "options": [
+      "(a) 1/5",
+      "(b) 25/11",
+      "(c) 5",
+      "(d) 11/25"
+    ],
+    "answer": "(d) 11/25"
+  },
+  {
+    "id": 4,
+    "question": "An electric dipole is placed at an alignment angle of 30° with an electric field of 2 × 10^5 N C^-1. It experiences a torque equal to 8 N m. The charge on the dipole if the dipole length is 1 cm is",
+    "options": [
+      "(a) 4 mC",
+      "(b) 8 mC",
+      "(c) 5 mC",
+      "(d) 7 mC"
+    ],
+    "answer": "(b) 8 mC"
+  },
+  {
+    "id": 5,
+    "question": "Four Gaussian surfaces are given below with charges inside each Gaussian surface. Rank the electric flux through each Gaussian surface in increasing order.",
+    "options": [
+      "(a) D < C < B < A",
+      "(b) A < B = C < D",
+      "(c) C < A = B < D",
+      "(d) D > C > B > A"
+    ],
+    "answer": "(a) D < C < B < A"
+  },
+  {
+    "id": 6,
+    "question": "The total electric flux for the following closed surface which is kept inside water",
+    "options": [
+      "(a) 80q / ε_0",
+      "(b) q / 40ε_0",
+      "(c) q / 80ε_0",
+      "(d) q / 160ε_0"
+    ],
+    "answer": "(b) q / 40ε_0"
+  },
+  {
+    "id": 7,
+    "question": "Two identical conducting balls having positive charges q1 and q2 are separated by a centre to centre distance r. If they are made to touch each other and then separated to the same distance, the force between them will be (NSEP 04-05)",
+    "options": [
+      "(a) less than before",
+      "(b) same as before",
+      "(c) more than before",
+      "(d) zero"
+    ],
+    "answer": "(c) more than before"
+  },
+  {
+    "id": 8,
+    "question": "Rank the electrostatic potential energies for the given system of charges in increasing order.",
+    "options": [
+      "(a) 1 = 4 < 2 < 3",
+      "(b) 2 = 4 < 3 < 1",
+      "(c) 2 = 3 < 1 < 4",
+      "(d) 3 < 1 < 2 < 4"
+    ],
+    "answer": "(a) 1 = 4 < 2 < 3"
+  },
+  {
+    "id": 9,
+    "question": "An electric field E = 10x î exists in a certain region of space. Then the potential difference V = V_0 - V_A, where V_0 is the potential at the origin and V_A is the potential at x = 2 m is:",
+    "options": [
+      "(a) 10 V",
+      "(b) -20 V",
+      "(c) +20 V",
+      "(d) -10 V"
+    ],
+    "answer": "(c) +20 V"
+  },
+  {
+    "id": 10,
+    "question": "A thin conducting spherical shell of radius R has a charge Q which is uniformly distributed on its surface. The correct plot for electrostatic potential due to this spherical shell is",
+    "options": [
+      "(a) Plot a",
+      "(b) Plot b (constant potential inside, decreasing outside)",
+      "(c) Plot c",
+      "(d) Plot d"
+    ],
+    "answer": "(b) Plot b (constant potential inside, decreasing outside)"
+  },
+  {
+    "id": 11,
+    "question": "Two points A and B are maintained at a potential of 7 V and -4 V respectively. The work done in moving 50 electrons from A to B is",
+    "options": [
+      "(a) 8.80 × 10^-17 J",
+      "(b) -8.80 × 10^-17 J",
+      "(c) 4.40 × 10^-17 J",
+      "(d) 5.80 × 10^-17 J"
+    ],
+    "answer": "(a) 8.80 × 10^-17 J"
+  },
+  {
+    "id": 12,
+    "question": "If voltage applied on a capacitor is increased from V to 2V, choose the correct conclusion.",
+    "options": [
+      "(a) Q remains the same, C is doubled",
+      "(b) Q is doubled, C doubled",
+      "(c) C remains same, Q doubled",
+      "(d) Both Q and C remain same"
+    ],
+    "answer": "(c) C remains same, Q doubled"
+  },
+  {
+    "id": 13,
+    "question": "A parallel plate capacitor stores a charge Q at a voltage V. Suppose the area of the parallel plate capacitor and the distance between the plates are each doubled then which is the quantity that will change?",
+    "options": [
+      "(a) Capacitance",
+      "(b) Charge",
+      "(c) Voltage",
+      "(d) Energy density"
+    ],
+    "answer": "(d) Energy density"
+  },
+  {
+    "id": 14,
+    "question": "Three capacitors are connected in triangle as shown in the figure (1μF between A & C, 2μF between A & B, 2μF between B & C). The equivalent capacitance between the points A and C is",
+    "options": [
+      "(a) 1 μF",
+      "(b) 2 μF",
+      "(c) 3 μF",
+      "(d) 1/4 μF"
+    ],
+    "answer": "(b) 2 μF"
+  },
+  {
+    "id": 15,
+    "question": "Two metallic spheres of radii 1 cm and 3 cm are given charges of -1 × 10^-2 C and 5 × 10^-2 C respectively. If these are connected by a conducting wire, the final charge on the bigger sphere is (AIPMT -2012)",
+    "options": [
+      "(a) 3 × 10^-2 C",
+      "(b) 4 × 10^-2 C",
+      "(c) 1 × 10^-2 C",
+      "(d) 2 × 10^-2 C"
+    ],
+    "answer": "(a) 3 × 10^-2 C"
+  }
+]
