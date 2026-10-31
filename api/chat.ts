@@ -285,14 +285,18 @@ export default async function handler(req: any, res: any) {
     }
 
     // Retrieve environment keys
-    const groqKeys = [
-      ...parseKeys(process.env.GROQ_API_KEYS),
-      ...(process.env.GROQ_API_KEY ? [process.env.GROQ_API_KEY] : []),
-    ];
-    const geminiKeys = [
-      ...parseKeys(process.env.GEMINI_API_KEYS),
-      ...(process.env.GEMINI_API_KEY ? [process.env.GEMINI_API_KEY] : []),
-    ];
+    const groqKeys = Array.from(
+      new Set([
+        ...parseKeys(process.env.GROQ_API_KEYS),
+        ...(process.env.GROQ_API_KEY ? [process.env.GROQ_API_KEY] : []),
+      ])
+    );
+    const geminiKeys = Array.from(
+      new Set([
+        ...parseKeys(process.env.GEMINI_API_KEYS),
+        ...(process.env.GEMINI_API_KEY ? [process.env.GEMINI_API_KEY] : []),
+      ])
+    );
     const openRouterKey = process.env.OPENROUTER_API_KEY || '';
     const huggingFaceKey = process.env.HUGGINGFACE_API_KEY || '';
 
