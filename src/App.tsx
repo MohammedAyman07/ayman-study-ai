@@ -197,13 +197,11 @@ function fixMarkdownTables(text: string): string {
 function fixLatex(text: string): string {
   if (!text) return '';
   let res = text;
-  // 1. Block math: \[ ... \] or \\\[ ... \\\]
+  // 1. Block math: \[ ... \] or \\[ ... \\]
   res = res.replace(/\\{1,2}\[([\s\S]+?)\\{1,2}\]/g, (_m, g) => '\n\n$$\n' + g.trim() + '\n$$\n\n');
   // 2. Inline math: \( ... \) or \\( ... \\)
   res = res.replace(/\\{1,2}\(([\s\S]+?)\\{1,2}\)/g, (_m, g) => '$' + g.trim() + '$');
-  // 3. Parentheses containing LaTeX command or power/subscript: e.g. (2^{\kappa}>2^{\lambda}), (n^4 - 20n^2 + 4)
-  res = res.replace(/\(([^\n()]*?(?:\\[a-zA-Z]+|\^[0-9a-zA-Z{]|_[0-9a-zA-Z{])[^\n()]*?)\)/g, (_m, g) => '$' + g.trim() + '$');
-  // 4. Ensure $$ blocks have proper newline separation
+  // 3. Ensure $$ blocks have proper newline separation for remark-math
   res = res.replace(/\$\$\s*([\s\S]+?)\s*\$\$/g, (_m, g) => '\n\n$$\n' + g.trim() + '\n$$\n\n');
   return res;
 }
@@ -2903,24 +2901,6 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                 </div>
               </div>
             </div>
-
-            {/* Formula Preview when problem contains math notation */}
-            {problem.trim() && (problem.includes('^') || problem.includes('_') || problem.includes('\\') || problem.includes('$') || problem.includes('≤') || problem.includes('≥')) && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-3 mx-1 p-3.5 bg-violet-50/70 border border-violet-100 rounded-2xl text-sm text-slate-800"
-              >
-                <div className="text-[11px] font-bold text-violet-600 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" /> Live Math Formula Preview:
-                </div>
-                <div className="overflow-x-auto markdown-body">
-                  <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>
-                    {fixLatex(problem)}
-                  </ReactMarkdown>
-                </div>
-              </motion.div>
-            )}
 
             {/* Under-bar hints */}
             <div className="mt-3 flex flex-col sm:flex-row items-center justify-between px-4 text-xs font-medium text-slate-400">
