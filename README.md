@@ -1,81 +1,51 @@
-# 🎓 AYMAN STUDY AI
+# 🎓 AYMAN STUDY AI — Production AI Academic Platform
 
-> **An enterprise-grade, multi-model AI academic tutoring and exam preparation platform built with React 19, TypeScript, Vite, and serverless LLM orchestration.**
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohammedAyman07%2Fayman-study-ai&env=GEMINI_API_KEY,GROQ_API_KEY,RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET,VITE_RAZORPAY_KEY_ID,VITE_GOOGLE_CLIENT_ID)
+[![Live Application](https://img.shields.io/badge/Live_App-ayman--study--ai.vercel.app-7c3aed?style=for-the-badge&logo=vercel)](https://ayman-study-ai.vercel.app)
+[![LinkedIn Profile](https://img.shields.io/badge/Connect_on-LinkedIn-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mohammed-ayman-s-661396289)
+[![GitHub Profile](https://img.shields.io/badge/GitHub-MohammedAyman07-181717?style=for-the-badge&logo=github)](https://github.com/MohammedAyman07)
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4.1-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache_2.0-22c55e.svg?style=for-the-badge)](LICENSE)
+
+> **Built & Engineered by [Mohammed Ayman S](https://www.linkedin.com/in/mohammed-ayman-s-661396289)**  
+> *Full-Stack Software Engineer & AI Systems Developer*
 
 ---
 
-## 📌 Executive Overview
+## 👨‍💻 Note for Technical Recruiters & Engineering Hiring Managers
 
-**AYMAN STUDY AI** is an intelligent educational platform tailored for secondary, higher secondary (Classes 9–12), and competitive examination aspirants. 
-
-Unlike generic chatbots that output unverified conversational summaries, AYMAN STUDY AI acts as a **strict, exam-marking tutor**. It enforces academic rigor, producing step-by-step LaTeX-formatted mathematical solutions, balanced chemical reactions, structured biological points, historical timelines enriched via Wikipedia API, and automated Mermaid.js diagrams.
-
-The platform is engineered with an intelligent **multi-model failover engine** (orchestrating Groq Llama 3.3, Google Gemini 2.0, OpenRouter, and Hugging Face), ensuring 99.9% uptime with zero vendor lock-in.
-
----
-
-## 🎯 Problem Statement & Solution
-
-### The Problem
-* **Hallucinations in Generic Chatbots:** General-purpose AI models often provide superficial or factually incorrect mathematical derivations and exam explanations.
-* **Lack of Formal Exam Structure:** Students lose marks because standard AI outputs conversational paragraphs instead of standard marking-scheme sections (*Given, To Find, Formula, Step-by-Step Calculation, Final Answer*).
-* **Vendor Downtime & Rate Limits:** Single-provider AI apps frequently fail when APIs encounter rate limits or outages during exam periods.
-* **Manual Note Digestion:** Reviewing dense academic textbooks and past papers requires tedious keyword extraction and manual flashcard generation.
-
-### The Solution
-* **Rigorous System Prompting & Formatting:** Strict prompt governance ensures every response follows formal exam-board criteria with vertical LaTeX display math blocks (`$$ ... $$`).
-* **Multi-Provider Failover Architecture:** Automatic cascade across high-speed LPU inference (Groq Llama 3.3 70B), Google Gemini 2.0 Flash, OpenRouter, and Hugging Face.
-* **Snap & Solve Vision AI:** High-precision OCR extracts questions from uploaded textbook photos or handwritten answer sheets.
-* **Self-Contained Evaluation Modules:** Interactive AI Quiz Generator and Unit-wise Question Banks allow students to self-assess with immediate scoring and analytical reviews.
+> *"I engineered **AYMAN STUDY AI** as an end-to-end, production-grade SaaS application that solves a real academic challenge: generic chatbots hallucinate formulas and produce conversational text that doesn't follow exam grading boards.  
+> 
+> Rather than a superficial API wrapper, this project demonstrates end-to-end full-stack software engineering: **zero-downtime multi-model AI failover pools**, **cryptographic HMAC-SHA256 payment verification with Razorpay**, **Google OAuth 2.0 verification**, **atomic credit accounting in MySQL with offline resilience**, and **real-time KaTeX LaTeX math & Mermaid.js rendering**."*  
+> 
+> — **Mohammed Ayman S** | [LinkedIn](https://www.linkedin.com/in/mohammed-ayman-s-661396289) | [GitHub](https://github.com/MohammedAyman07)
 
 ---
 
-## 🚀 Key Features (Verified & Implemented)
+## 📑 Table of Contents
+1. [Core Engineering Highlights](#-core-engineering-highlights)
+2. [Key Architecture & Data Flow](#-system-architecture)
+3. [Deep-Dive: Technical Challenges & Solutions](#-technical-deep-dive--challenges-solved)
+   * [1. Zero-Downtime Multi-Model AI Orchestrator](#1-zero-downtime-multi-model-ai-orchestration--failover)
+   * [2. End-to-End Cryptographic Payment Processing (Razorpay)](#2-cryptographic-payment-gateway-integration-razorpay)
+   * [3. Secure Authentication & Recruiter Guest Access](#3-authentication-google-oauth-20--guest-demo)
+   * [4. Atomic Credit Economy & Dual-State Persistence](#4-atomic-credit-economy--dual-persistence-engine)
+   * [5. Academic Solution Formatter with LaTeX & Mermaid.js](#5-pedagogical-rendering-engine-katex-latex--mermaidjs)
+4. [Technology Stack](#-technology-stack--skills-matrix)
+5. [Verified Implemented Features](#-verified-features)
+6. [Security & Defense-in-Depth](#-security-implementation)
+7. [Local Setup & Testing Guide](#-local-development-setup)
+8. [Author & Contact Information](#-author--contact)
 
-### 1. 🧮 Multi-Subject AI Exam Solver (13+ Disciplines)
-Dedicated AI study buddies tuned for specific textbook syllabi:
-* **STEM:** Mathematics, Physics, Chemistry, Biology, Botany, Zoology, Computer Science.
-* **Humanities & Languages:** English Literature, Tamil Grammar & Literature, History (with live Wikipedia context injection).
-* **Commerce & Finance:** Commerce, Accountancy, Economics.
+---
 
-### 2. 📸 Snap & Solve (Vision AI)
-* Supports drag-and-drop or file upload of question photos (PNG, JPEG, WebP).
-* Automatically encodes images to base64, invokes multimodal vision models (`llama-3.2-11b-vision-preview`, `gemini-2.0-flash`, `Qwen2-VL-7B-Instruct`), and returns formatted answers.
+## 🌟 Core Engineering Highlights
 
-### 3. 📐 Exam-Oriented Step-by-Step Solutions
-* Formats answers strictly into structured exam booklets:
-  * **--- SOLUTION ---**: Pure vertical mathematical steps in KaTeX LaTeX.
-  * **--- FINAL ANSWER ---**: Highlighted boxed conclusion with SI units.
-  * **--- EXPLANATION ---**: Pedagogical breakdown of principles.
-  * **--- KEYWORDS ---**: Critical exam grading terms.
-* Generates live **Mermaid.js charts and circuit diagrams** dynamically when visual explanations are needed.
-
-### 4. 📝 AI Quiz Generator & Assessment Engine
-* Generates customized Multiple Choice Question sets on any topic.
-* Configurable parameters: target class/grade level (Class 9 through College) and question volume.
-* Interactive test runner with instant feedback, question-by-question review, timer, and score analytics.
-
-### 5. 📚 Pre-loaded Physics Question Bank
-* Curated chapter-wise MCQ question banks for Physics (Electrostatics, Current Electricity, Magnetism, and Electromagnetic Induction) with immediate answers and rationales.
-
-### 6. 🔍 Exam Answer Summarizer & Keyword Extractor
-* Analyzes lengthy essay answers or scanned notes.
-* Extracts high-yield exam keywords and generates bulleted concept summaries for quick revision.
-
-### 7. 💬 Context-Aware "Study Buddy" Chatbot
-* Embedded discussion thread beneath every solved problem.
-* Retains solved problem context to explain specific steps, clarify doubts, or provide alternative derivation methods.
-
-### 8. 🔐 Authentication & Credit Economy
-* Google OAuth 2.0 Sign-In with 20 initial complimentary credits.
-* Automatic IP geolocation detection (`ipapi.co`) adjusting checkout currency dynamically (INR for India, EUR for Europe, USD internationally).
-* Razorpay payment gateway integration for real-time credit top-ups.
+* 🔄 **Zero-Downtime Multi-Model AI Cascade:** Built a self-healing LLM orchestration engine in serverless TypeScript that rotates across **Groq LPUs**, **Google Gemini multimodal vision**, **OpenRouter**, and **Hugging Face**. If any provider suffers a 429 rate limit or outage, requests failover seamlessly in milliseconds without the user noticing.
+* 💳 **Cryptographic Payment Gateway (Razorpay):** End-to-end payment workflow with serverless order generation, dynamic currency detection (INR, USD, EUR via IP geolocation), and **cryptographic HMAC-SHA256 signature verification** before crediting accounts.
+* 🔐 **Enterprise Identity (Google OAuth 2.0 & Token Verification):** Server-side verification of Google ID tokens against Google’s official OAuth2 endpoints, paired with a custom base64 session token system and a **1-click Recruiter Demo access button** for zero-friction candidate review.
+* ⚡ **Atomic Credit Economy (-1 Credit per Query):** Guaranteed subtraction across every single AI solve, chat query, quiz generation, and note summarizer with real-time UI badges, browser `localStorage` persistence, and optional MySQL database accounting.
+* 📐 **KaTeX Mathematical Typesetting & Dynamic Visuals:** Custom regex parsing pipeline that isolates display math blocks (`$$ ... $$`), renders formulas with KaTeX, and automatically prompts LLMs to generate valid Mermaid.js diagrams for circuits, graphs, and biology flowcharts.
 
 ---
 
@@ -83,201 +53,195 @@ Dedicated AI study buddies tuned for specific textbook syllabi:
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Frontend (React 19 + TypeScript + Vite)"]
-        UI["Tailwind CSS 4 UI / Lucide Icons"]
-        Math["KaTeX LaTeX Math Renderer"]
-        AuthComp["Google OAuth Login Component"]
-        PaymentComp["Razorpay Checkout Modal"]
+    subgraph Client ["Client Tier (React 19 + TypeScript + Vite)"]
+        UI["Modern Tailwind CSS 4 Glassmorphism UI"]
+        State["Credit & Auth State (React + LocalStorage Sync)"]
+        KaTeX["KaTeX LaTeX Math & Mermaid Renderer"]
+        RZPClient["Razorpay Checkout Modal (Dynamic Key Injection)"]
     end
 
-    subgraph BackendGateway ["API Gateway & Routing (Vercel Serverless / Apache PHP)"]
-        Rewrite["Vercel Rewrites / vercel.json"]
-        ChatFunc["/api/chat (Serverless Orchestrator)"]
-        AuthFunc["/api/auth (OAuth Token Validator)"]
-        PayFunc["/api/payment (Razorpay HMAC Validator)"]
+    subgraph ServerlessTier ["Serverless Backend (Vercel Node.js / TypeScript)"]
+        AuthRoute["/api/auth (OAuth Tokeninfo Validator)"]
+        ChatRoute["/api/chat (Multi-LLM Orchestrator & Credit Guard)"]
+        PaymentRoute["/api/payment (Order Generator & HMAC Validator)"]
     end
 
-    subgraph AIOrchestrator ["Multi-Model Failover Cascade"]
-        Groq["1. Groq (Llama 3.3 70B Versatile)"]
-        Gemini["2. Google Gemini 2.0 Flash"]
-        OpenRouter["3. OpenRouter Free Tier Fallback"]
+    subgraph LLMCascade ["AI Orchestration Tier (Key Rotation & Failover)"]
+        Groq["1. Groq LPU (GPT-OSS 120B / Qwen 27B)"]
+        Gemini["2. Google Gemini (3.5 Flash-Lite / 3.8 Flash / Vision)"]
+        OpenRouter["3. OpenRouter Failover"]
         HuggingFace["4. Hugging Face Inference API"]
     end
 
-    subgraph ExternalServices ["External Providers & Storage"]
-        GoogleOAuth["Google Identity Services"]
-        RazorpayAPI["Razorpay Payment Gateway"]
-        Wikipedia["Wikipedia Search & Extract API"]
+    subgraph Persistence ["Persistence & External Services"]
+        MySQL[("MySQL Database (Users & Payments Schema)")]
+        GoogleIdentity["Google OAuth 2.0 API"]
+        RazorpayCore["Razorpay Payments API"]
+        Wikipedia["Wikipedia REST API (Context Enrichment)"]
     end
 
-    UI --> Rewrite
-    Rewrite --> ChatFunc
-    Rewrite --> AuthFunc
-    Rewrite --> PayFunc
+    UI --> AuthRoute
+    UI --> ChatRoute
+    UI --> PaymentRoute
+    
+    AuthRoute --> GoogleIdentity
+    AuthRoute -. Persist .-> MySQL
 
-    AuthComp --> AuthFunc
-    AuthFunc --> GoogleOAuth
+    PaymentRoute --> RazorpayCore
+    PaymentRoute -. Record .-> MySQL
 
-    PaymentComp --> PayFunc
-    PayFunc --> RazorpayAPI
-
-    ChatFunc --> Wikipedia
-    ChatFunc --> Groq
-    Groq -. Failover .-> Gemini
-    Gemini -. Failover .-> OpenRouter
-    OpenRouter -. Failover .-> HuggingFace
-    AIOrchestrator --> Math
+    ChatRoute --> Wikipedia
+    ChatRoute --> Groq
+    Groq -. 429 Failover .-> Gemini
+    Gemini -. Outage Failover .-> OpenRouter
+    OpenRouter -. Fallback .-> HuggingFace
+    
+    ChatRoute -. Decrement .-> MySQL
+    ChatRoute --> KaTeX
 ```
 
 ---
 
-## 💻 Tech Stack
+## 💡 Technical Deep-Dive & Challenges Solved
 
-| Layer | Technologies |
-|---|---|
-| **Frontend Framework** | React 19.0, TypeScript 5.8, Vite 6.2 |
-| **Styling & Motion** | Tailwind CSS 4.1, Framer Motion (`motion/react`), Lucide React |
-| **Math & Markdown** | KaTeX 0.16, `react-markdown`, `remark-math`, `rehype-katex`, `remark-gfm` |
-| **Serverless Backend** | Vercel Serverless Functions (Node.js / TypeScript) |
-| **Legacy / LAMP Backend** | PHP 8.2+, PDO MySQL, cURL, Apache `.htaccess` |
-| **AI LLM Inference** | Groq LPU API, Google Gemini API, OpenRouter, Hugging Face Inference |
-| **External Integrations**| Google OAuth 2.0, Razorpay Gateway, Wikipedia REST API, `ipapi.co` |
+### 1. Zero-Downtime Multi-Model AI Orchestration & Failover
+* **The Problem:** Free-tier and single-provider AI APIs frequently suffer from aggressive 429 rate limits, token budget depletion, or unexpected outages.
+* **The Solution:** I engineered a multi-tier serverless orchestration pipeline in [`api/chat.ts`](api/chat.ts):
+  * **Multi-Key Rotation Pool:** Accepts comma-separated key pools (`GROQ_API_KEYS`, `GEMINI_API_KEYS`). On every incoming query, it selects an active key using randomized load balancing.
+  * **Intelligent Routing for Multimodal Tasks:** If the student uploads an image (Snap & Solve), the router automatically prioritizes Google Gemini’s multimodal vision models (`gemini-3.5-flash-lite`, `gemini-3.8-flash`) and Hugging Face Vision (`Qwen2-VL-7B`). Text queries route to ultra-low-latency Groq LPU models (`openai/gpt-oss-120b`, `qwen/qwen3.8-27b`).
+  * **Zero-Crash Execution:** If an API rejects a request with an error, the error is trapped in a non-fatal `try/catch` loop that cascades immediately to the next available provider.
+
+### 2. Cryptographic Payment Gateway Integration (Razorpay)
+* **The Problem:** Frontend client-side payment confirmations are vulnerable to tampering and man-in-the-middle attacks.
+* **The Solution:** Built a strict, two-step backend transaction pipeline in [`api/payment.ts`](api/payment.ts):
+  1. **Order Creation:** Backend securely contacts Razorpay with basic auth credentials to create a verified `order_id` in paise/smallest currency unit.
+  2. **Dynamic Public Key Injection:** Public keys are returned directly from the backend order response, decoupling frontend builds from hardcoded secrets.
+  3. **Cryptographic HMAC-SHA256 Verification:** After user payment, the frontend passes `razorpay_order_id`, `razorpay_payment_id`, and `razorpay_signature` to the server. The server computes:
+     $$\text{Expected Signature} = \text{HMAC-SHA256}(\text{order\_id} \parallel \text{payment\_id}, \text{KEY\_SECRET})$$
+     Credits are credited **only if the generated hash matches the signature byte-for-byte**.
+  4. **Currency Fallback:** Automatically catches Indian accounts attempting international currency (`USD`/`EUR`) orders and falls back to standard `INR` (₹99).
+
+### 3. Authentication: Google OAuth 2.0 & Guest Demo
+* **The Problem:** Recruiters and evaluators reviewing a portfolio repository often hesitate to link personal Google accounts just to test application features.
+* **The Solution:**
+  * **Production OAuth 2.0:** Integrated `@react-oauth/google` with a dedicated serverless authentication handler [`api/auth.ts`](api/auth.ts) that verifies tokens against Google's `https://oauth2.googleapis.com/tokeninfo` endpoint.
+  * **1-Click Recruiter Guest Access:** Added an instant "Guest Demo" button that provisions a temporary verified session with **20 complimentary credits**, allowing hiring managers to explore all features (Math Solver, Chemistry Derivations, AI Quiz) in 1 click.
+
+### 4. Atomic Credit Economy & Dual-Persistence Engine
+* **The Problem:** Stateless serverless functions lose memory across invocations, which previously caused student credit counters to reset to default upon browser refresh.
+* **The Solution:**
+  * **Live Client Countdown:** Every request deducts exactly 1 credit ($$\text{credits}_{\text{new}} = \max(0, \text{credits}_{\text{old}} - 1)$$).
+  * **LocalStorage Syncing:** Synced React state with browser storage (`ayman_study_user`, `ayman_study_token`) so sessions and balances persist across tab closures and refreshes.
+  * **MySQL Database Integration:** Designed [`database.sql`](backend/php/database.sql) with parameterized queries for persistent cloud storage:
+    ```sql
+    UPDATE users SET credits = credits - 1 WHERE google_id = ? OR email = ?;
+    ```
+  * **Defensive Timeout Safeguard:** Set a 2500ms connection timeout on MySQL so that if the remote database is unreachable, the system gracefully maintains session tracking rather than failing with HTTP 500.
+
+### 5. Pedagogical Rendering Engine: KaTeX LaTeX & Mermaid.js
+* **The Problem:** Standard LLM outputs blend prose and formulas into unreadable inline markdown walls.
+* **The Solution:**
+  * Enforced strict prompt boundaries instructing models to output pure vertical calculations inside display math blocks (`$$ ... $$`).
+  * Integrated **KaTeX** with `remark-math` and `rehype-katex` for ultra-crisp, GPU-accelerated formula typography.
+  * Integrated a custom Wikipedia REST API context enrichment hook that extracts verified historical facts for humanities questions.
+  * Dynamic visual prompting prompts the LLM to output valid **Mermaid.js** code blocks whenever graphs, circuit diagrams, or biochemical pathways are relevant.
 
 ---
 
-## 🔒 Security & Defense-in-Depth
+## 🛠️ Technology Stack & Skills Matrix
 
-Security was an absolute priority during the refactoring of AYMAN STUDY AI:
-
-1. **Zero Client-Side Exposure:** Private API keys (`GROQ_API_KEY`, `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `HUGGINGFACE_API_KEY`, `RAZORPAY_KEY_SECRET`, `DB_PASS`) are strictly confined to server-side environments. No private keys are injected into frontend bundles.
-2. **Payment Integrity:** Razorpay transactions verify HMAC-SHA256 signatures server-side using cryptographic secrets before any student credit balance is adjusted.
-3. **Authentication Verification:** Client-supplied Google OAuth ID tokens are verified server-side via Google's `tokeninfo` endpoint to prevent token forgery.
-4. **CORS & HTTP Security Headers:** Vercel deployment enforces `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `X-XSS-Protection: 1; mode=block`, and strict referrer policies.
-5. **Failover Safety:** Redundant API keys can be passed as comma-separated lists (`GROQ_API_KEYS`, `GEMINI_API_KEYS`) enabling round-robin retry without key exhaustion.
+| Domain | Technologies & Libraries | Practical Competency Demonstrated |
+| :--- | :--- | :--- |
+| **Frontend Core** | React 19, TypeScript 5.8, Vite 6 | Component modularity, typed state, modern hooks, Vite build pipeline |
+| **Styling & UI** | Tailwind CSS 4, Framer Motion, Lucide Icons | Responsive design, glassmorphic styling, smooth layout transitions |
+| **Math & Data Viz**| KaTeX, Mermaid.js, React-Markdown, Rehype | Custom math parsing, SVG diagram rendering, code fence isolation |
+| **Backend Architecture** | Vercel Serverless (Node.js), PHP 8.2 (LAMP fallback) | Serverless microservices, REST design, connection pooling, clean URLs |
+| **Database & Storage** | MySQL / MariaDB, Browser LocalStorage | Relational schemas, ACID transactions, dual-tier client/server persistence |
+| **Security & Auth** | Google OAuth 2.0, HMAC-SHA256, CORS Headers | Cryptographic hashing, token verification, zero-client secret leakage |
+| **AI & LLM Services**| Groq LPU, Google Gemini API, OpenRouter, HuggingFace | Multimodal vision OCR, load balancing, multi-model cascade failover |
+| **Payments** | Razorpay Gateway, Dynamic IP Geolocation | Dynamic order creation, international currency adaptation, webhooks |
 
 ---
 
-## 📸 Application Screenshots
+## 🚀 Verified Features
 
-| Student Dashboard & Solver | AI Quiz Assessment |
-|:---:|:---:|
-| ![Dashboard Screenshot](public/favicon.png) <br> *Multi-Subject Interface with KaTeX Formulas* | ![Quiz Screenshot](public/favicon.png) <br> *Real-time MCQ Generation & Score Analytics* |
+- [x] **Multi-Subject AI Solver (13+ Syllabi):** Mathematics, Physics, Chemistry, Biology, Botany, Zoology, Computer Science, English Literature, Tamil Grammar, History, Commerce, Accountancy, and Economics.
+- [x] **Snap & Solve (Multimodal Vision AI):** Upload photos of handwritten or printed textbook problems for instant step-by-step LaTeX derivations.
+- [x] **AI Quiz Generator & Assessment Engine:** Generates interactive MCQs for any topic and class level with a real-time question runner, score analytics, and explanations.
+- [x] **Context-Aware Study Buddy Chat:** Persistent conversational thread under every solved answer to clarify specific derivation steps.
+- [x] **Exam Answer Summarizer:** Condenses long essays and past papers into key grading criteria and bulleted revision points.
+- [x] **Pre-loaded Physics Chapter Banks:** Unit-wise MCQs covering Electrostatics, Current Electricity, and Magnetism.
+- [x] **Dual Deployment Support:** Ready out-of-the-box for **Vercel Serverless** or traditional **Hostinger / Apache LAMP** hosting.
 
-> *Note: Place your production screenshots in `public/screenshots/` and update these links.*
+---
+
+## 🔒 Security Implementation
+
+1. **Zero Secret Leakage:** No API secrets are exposed via `VITE_` public variables. All private keys (`GROQ_API_KEY`, `GEMINI_API_KEY`, `RAZORPAY_KEY_SECRET`, `DB_PASS`) remain strictly inside server-side environments.
+2. **Defensive Git Policy:** The repository's [`.gitignore`](.gitignore) is pre-configured to exclude all `.env`, `.env.local`, and credential files.
+3. **Cryptographic Validation:** Payments cannot be spoofed without the private server-side secret key.
+4. **OWASP HTTP Security Headers:** Configured via [`vercel.json`](vercel.json):
+   * `X-Content-Type-Options: nosniff`
+   * `X-Frame-Options: DENY`
+   * `X-XSS-Protection: 1; mode=block`
+   * `Referrer-Policy: strict-origin-when-cross-origin`
 
 ---
 
 ## ⚙️ Local Development Setup
 
-### Prerequisites
-* **Node.js**: v18.0.0 or higher (v20+ recommended)
-* **npm**: v9.0.0 or higher
-* *(Optional)* **PHP 8.1+ & MySQL** if running the legacy Apache backend locally.
-
-### Step 1: Clone the Repository
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/MohammedAyman07/ayman-study-ai.git
 cd ayman-study-ai
 ```
 
-### Step 2: Install Dependencies
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### Step 3: Configure Environment Variables
+### 3. Configure Environment Variables
 Copy `.env.example` to `.env`:
 ```bash
 cp .env.example .env
 ```
-Fill in your API keys in `.env`:
+Populate your keys (only test/development keys needed locally):
 ```env
-GEMINI_API_KEY=your_gemini_key
 GROQ_API_KEY=your_groq_key
-OPENROUTER_API_KEY=your_openrouter_key
-HUGGINGFACE_API_KEY=your_huggingface_key
+GEMINI_API_KEY=your_gemini_key
 RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_KEY_SECRET=your_razorpay_secret
-VITE_RAZORPAY_KEY_ID=your_razorpay_key
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 ```
 
-### Step 4: Run Development Server
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open **`http://localhost:5173`** in your browser.
 
-### Step 5: Validate Type Safety & Production Build
+### 5. Run Type Safety & Production Build
 ```bash
-npm run lint    # Typecheck via tsc --noEmit
-npm run build   # Production bundle generation
+npm run lint    # Strict TypeScript typecheck via tsc --noEmit
+npm run build   # Production Vite bundle build
 ```
-
----
-
-## 🚀 Deployment Guide
-
-### Option A: Deploy to Vercel (Recommended)
-
-1. Push your repository to GitHub:
-   ```bash
-   git add .
-   git commit -m "feat: complete production-ready application"
-   git branch -M main
-   git remote add origin https://github.com/MohammedAyman07/ayman-study-ai.git
-   git push -u origin main
-   ```
-2. Navigate to [Vercel Dashboard](https://vercel.com/dashboard) and click **"Add New" > "Project"**.
-3. Import `ayman-study-ai`.
-4. Vercel automatically detects **Vite**:
-   * **Build Command:** `npm run build`
-   * **Output Directory:** `dist`
-5. In **Environment Variables**, add:
-   * `GEMINI_API_KEY`
-   * `GROQ_API_KEY`
-   * `OPENROUTER_API_KEY` (optional fallback)
-   * `HUGGINGFACE_API_KEY` (optional fallback)
-   * `RAZORPAY_KEY_ID` & `RAZORPAY_KEY_SECRET`
-   * `VITE_RAZORPAY_KEY_ID`
-   * `VITE_GOOGLE_CLIENT_ID`
-6. Click **Deploy**. Your live URL will be provisioned in ~60 seconds!
-
-### Option B: Deploy to Hostinger / cPanel (LAMP Stack)
-For users running standard Apache/PHP hosting:
-1. Build the frontend: `npm run build`.
-2. Upload the contents of `dist/` to `public_html/`.
-3. Upload `backend/php/` contents (`api.php`, `auth.php`, `db.php`, `payment.php`, `.htaccess`) to `public_html/`.
-4. Import `database.sql` into phpMyAdmin.
-5. Configure database credentials and API keys in your hosting environment variables or web server configuration.
-
----
-
-## 🗺️ Roadmap & Future Enhancements
-
-- [x] Multi-Subject AI Exam Solver with KaTeX & Mermaid diagrams.
-- [x] Snap & Solve Multimodal Vision OCR.
-- [x] AI Quiz Generator with custom grade targeting.
-- [x] Multi-Model Serverless API with failover resilience.
-- [ ] Voice-to-Text spoken question input for mobile learners.
-- [ ] Export exam answers to formatted, downloadable PDF booklets.
-- [ ] Offline PWA (Progressive Web App) support for revision flashcards.
-- [ ] Personalized learning analytics tracking student strengths and weak topics.
 
 ---
 
 ## 👨‍💻 Author & Contact
 
 **Mohammed Ayman S**  
-*Full Stack Developer & AI Enthusiast*
+*Full Stack Software Engineer & AI Systems Developer*
 
-* 🌐 Portfolio: [aymaninfotech.com](https://aymaninfotech.com)
-* 💼 LinkedIn: [linkedin.com/in/your-profile](https://linkedin.com)
-* 🐙 GitHub: [@MohammedAyman07](https://github.com/MohammedAyman07)
-* 📧 Email: mohammedayman0107@gmail.com
+* 🌐 **Live Website:** [ayman-study-ai.vercel.app](https://ayman-study-ai.vercel.app)
+* 💼 **LinkedIn Profile:** [linkedin.com/in/mohammed-ayman-s-661396289](https://www.linkedin.com/in/mohammed-ayman-s-661396289)
+* 🐙 **GitHub Profile:** [@MohammedAyman07](https://github.com/MohammedAyman07)
+* 📧 **Email:** [mohammedayman0107@gmail.com](mailto:mohammedayman0107@gmail.com)
+* 🏢 **Portfolio:** [aymaninfotech.com](https://aymaninfotech.com)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is open-source and distributed under the [Apache License 2.0](LICENSE).
