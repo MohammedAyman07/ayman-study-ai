@@ -727,8 +727,41 @@ export default function App() {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // SaaS Features
-  const [user, setUser] = useState<any>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(() => {
+    try {
+      const saved = localStorage.getItem('ayman_study_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [token, setToken] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem('ayman_study_token') || null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      if (user) {
+        localStorage.setItem('ayman_study_user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('ayman_study_user');
+      }
+    } catch (_) {}
+  }, [user]);
+
+  useEffect(() => {
+    try {
+      if (token) {
+        localStorage.setItem('ayman_study_token', token);
+      } else {
+        localStorage.removeItem('ayman_study_token');
+      }
+    } catch (_) {}
+  }, [token]);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
 
@@ -747,6 +780,7 @@ export default function App() {
 
   const generateQuiz = async () => {
     if (!user) { alert('Please login first!'); return; }
+    if (user.credits <= 0) { setShowUpgrade(true); setQuizPhase('setup'); return; }
     if (!quizTopic.trim()) { setQuizError('Please enter a topic.'); return; }
     setQuizPhase('generating');
     setQuizError(null);
@@ -785,7 +819,7 @@ Rules:
         if (data.message === 'INSUFFICIENT_CREDITS') { setShowUpgrade(true); setQuizPhase('setup'); return; }
         throw new Error(data.message || 'Failed to generate quiz');
       }
-      setUser((prev: any) => ({ ...prev, credits: Math.max(0, prev.credits - 1) }));
+      setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
       let rawText = (data.text as string).trim();
       // Strip markdown code fences if model wrapped in them
       rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
@@ -1010,6 +1044,11 @@ Rules:
       alert("Please login first to unlock your Study Buddy!");
       return;
     }
+    if (user.credits <= 0) {
+      setShowUpgrade(true);
+      setError("You have run out of credits. Please upgrade to continue.");
+      return;
+    }
     if (!problem && !image) {
       setError("Please provide a problem description or an image.");
       return;
@@ -1086,7 +1125,7 @@ Rules:
       if (data.status === 'success') {
         setResult(fixMarkdownTables(data.text));
         // Decrease credit in state locally for snappiness
-        setUser((prev: any) => ({ ...prev, credits: Math.max(0, prev.credits - 1) }));
+        setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
       } else if (data.message === 'INSUFFICIENT_CREDITS') {
         setShowUpgrade(true);
         throw new Error("You have run out of credits.");
@@ -1108,6 +1147,11 @@ Rules:
   const handleChat = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!chatInput.trim() || !result) return;
+    if (user && user.credits <= 0) {
+      setShowUpgrade(true);
+      setChatHistory(prev => [...prev, { role: 'model', text: "⚠️ You have run out of credits. Please upgrade to continue!" }]);
+      return;
+    }
 
     const userMessage = chatInput.trim();
     setChatInput('');
@@ -1149,7 +1193,7 @@ Rules:
 
       if (data.status === 'success') {
         setChatHistory(prev => [...prev, { role: 'model', text: data.text }]);
-        setUser((prev: any) => ({ ...prev, credits: Math.max(0, prev.credits - 1) }));
+        setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
         setTimeout(scrollToBottom, 100);
       } else if (data.message === 'INSUFFICIENT_CREDITS') {
         setShowUpgrade(true);
@@ -2552,6 +2596,7 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
               <button
                 onClick={async () => {
                   if (!user) { alert('Please login first!'); return; }
+    if (user.credits <= 0) { setShowUpgrade(true); setQuizPhase('setup'); return; }
                   if (!problem.trim() && !image) { setError('Please paste your answer or upload an image first.'); return; }
                   setLoading(true); setError(null); setResult(null);
                   try {
@@ -2571,7 +2616,7 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                     const data = await res.json();
                     if (data.status === 'success') {
                       setResult(data.text);
-                      setUser((prev: any) => ({ ...prev, credits: Math.max(0, prev.credits - 1) }));
+                      setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
                     } else if (data.message === 'INSUFFICIENT_CREDITS') {
                       setShowUpgrade(true);
                     } else { throw new Error(data.message || 'Failed'); }

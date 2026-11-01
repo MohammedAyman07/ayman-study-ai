@@ -3,6 +3,8 @@
  * Vercel Serverless Function (/api/auth)
  */
 
+import { findOrCreateUser } from './lib/db';
+
 export const config = {
   maxDuration: 15,
 };
@@ -39,13 +41,12 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ status: 'error', message: 'Invalid Google payload' });
     }
 
-    const user = {
-      id: payload.sub,
-      name: payload.name || 'Student',
-      email: payload.email,
-      picture: payload.picture || '',
-      credits: 20,
-    };
+    const user = await findOrCreateUser(
+      payload.sub,
+      payload.email,
+      payload.name || 'Student',
+      payload.picture || ''
+    );
 
     // Generate safe bearer session token
     const tokenPayload = {

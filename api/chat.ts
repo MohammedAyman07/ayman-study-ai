@@ -3,6 +3,8 @@
  * Vercel Serverless Function (/api/chat)
  */
 
+import { deductCredit } from './lib/db';
+
 export const config = {
   maxDuration: 60,
 };
@@ -263,6 +265,28 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ status: 'error', message: 'Missing required prompt or image payload' });
     }
 
+    // Verify & deduct 1 user credit for AI query
+    let userId = 'guest';
+    let userEmail = '';
+    const authHeader = (req.headers['authorization'] || req.headers['Authorization'] || '') as string;
+    if (authHeader.startsWith('Bearer ')) {
+      try {
+        const rawToken = Buffer.from(authHeader.slice(7), 'base64').toString('utf-8');
+        const parsed = JSON.parse(rawToken);
+        if (parsed.user_id) userId = parsed.user_id;
+        if (parsed.email) userEmail = parsed.email;
+      } catch (_) {}
+    }
+
+    const creditResult = await deductCredit(userId, userEmail);
+    if (!creditResult.success) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'INSUFFICIENT_CREDITS',
+        remaining_credits: 0,
+      });
+    }
+
     // Graph & Diagram visual prompt injection
     systemInstruction += '\n\nCRITICAL INSTRUCTION FOR GRAPHS & DIAGRAMS: If the question explicitly or implicitly requires a graph, chart, circuit diagram, flowchart, or visual representation, generate it using valid Mermaid.js syntax enclosed in a ```mermaid markdown block.';
 
@@ -319,7 +343,7 @@ export default async function handler(req: any, res: any) {
           const key = groqKeys[Math.floor(Math.random() * groqKeys.length)];
           try {
             const text = await callGroq(model.name, prompt, systemInstruction, image, mimeType, key);
-            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'groq' });
+            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'groq', remaining_credits: creditResult.remaining_credits });
           } catch (err: any) {
             lastError = `Groq (${model.name}): ${err?.message || 'Failed'}`;
           }
@@ -329,7 +353,7 @@ export default async function handler(req: any, res: any) {
           const key = geminiKeys[Math.floor(Math.random() * geminiKeys.length)];
           try {
             const text = await callGoogleGemini(model.name, prompt, systemInstruction, image, mimeType, key);
-            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'google' });
+            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'google', remaining_credits: creditResult.remaining_credits });
           } catch (err: any) {
             lastError = `Google (${model.name}): ${err?.message || 'Failed'}`;
           }
@@ -337,14 +361,14 @@ export default async function handler(req: any, res: any) {
       } else if (model.provider === 'openrouter' && openRouterKey) {
         try {
           const text = await callOpenRouter(model.name, prompt, systemInstruction, image, mimeType, openRouterKey);
-          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'openrouter' });
+          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'openrouter', remaining_credits: creditResult.remaining_credits });
         } catch (err: any) {
           lastError = `OpenRouter (${model.name}): ${err?.message || 'Failed'}`;
         }
       } else if (model.provider === 'huggingface' && huggingFaceKey) {
         try {
           const text = await callHuggingFace(model.name, prompt, systemInstruction, image, mimeType, huggingFaceKey);
-          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'huggingface' });
+          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'huggingface', remaining_credits: creditResult.remaining_credits });
         } catch (err: any) {
           lastError = `HuggingFace (${model.name}): ${err?.message || 'Failed'}`;
         }

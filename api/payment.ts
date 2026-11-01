@@ -4,6 +4,7 @@
  */
 
 import crypto from 'crypto';
+import { addCredits } from './lib/db';
 
 export const config = {
   maxDuration: 20,
@@ -99,11 +100,23 @@ export default async function handler(req: any, res: any) {
         .digest('hex');
 
       if (expectedSignature === razorpay_signature) {
-        // Payment verified successfully
+        // Extract user id from Authorization header token
+        let userId = body.user_id;
+        const authHeader = (req.headers['authorization'] || req.headers['Authorization'] || '') as string;
+        if (authHeader.startsWith('Bearer ')) {
+          try {
+            const rawToken = Buffer.from(authHeader.slice(7), 'base64').toString('utf-8');
+            const parsed = JSON.parse(rawToken);
+            if (parsed.user_id) userId = parsed.user_id;
+          } catch (_) {}
+        }
+
+        const creditResult = await addCredits(userId || 'default', 100, razorpay_order_id, razorpay_payment_id);
+
         return res.status(200).json({
           status: 'success',
           message: 'Payment verified',
-          new_credits: 120, // Adds 100 credits
+          new_credits: creditResult.new_credits,
         });
       } else {
         return res.status(400).json({ status: 'error', message: 'Invalid payment signature' });
