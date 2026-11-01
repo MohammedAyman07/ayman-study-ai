@@ -3,8 +3,6 @@
  * Vercel Serverless Function (/api/chat)
  */
 
-import { deductCredit } from './lib/db.ts';
-
 export const config = {
   maxDuration: 60,
 };
@@ -265,7 +263,8 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ status: 'error', message: 'Missing required prompt or image payload' });
     }
 
-    // Verify & deduct 1 user credit for AI query
+    // Verify user & check credits
+    let userCredits = 20;
     let userId = 'guest';
     let userEmail = '';
     const authHeader = (req.headers['authorization'] || req.headers['Authorization'] || '') as string;
@@ -275,16 +274,62 @@ export default async function handler(req: any, res: any) {
         const parsed = JSON.parse(rawToken);
         if (parsed.user_id) userId = parsed.user_id;
         if (parsed.email) userEmail = parsed.email;
+        if (typeof parsed.credits === 'number') userCredits = parsed.credits;
       } catch (_) {}
     }
 
-    const creditResult = await deductCredit(userId, userEmail);
-    if (!creditResult.success) {
+    if (userCredits <= 0) {
       return res.status(403).json({
         status: 'error',
         message: 'INSUFFICIENT_CREDITS',
         remaining_credits: 0,
       });
+    }
+
+    let remainingCredits = Math.max(0, userCredits - 1);
+
+    // Optional MySQL persistence if configured
+    const dbHost = process.env.DB_HOST;
+    const dbUser = process.env.DB_USER;
+    const dbPass = process.env.DB_PASS || process.env.DB_PASSWORD;
+    const dbName = process.env.DB_NAME;
+    const dbUrl = process.env.DATABASE_URL;
+
+    if ((dbUrl || (dbHost && dbUser && dbName)) && dbHost !== 'localhost' && dbHost !== '127.0.0.1') {
+      try {
+        const { default: mysql } = await import('mysql2/promise');
+        const conn = dbUrl
+          ? await mysql.createConnection(dbUrl)
+          : await mysql.createConnection({
+              host: dbHost,
+              user: dbUser,
+              password: dbPass || '',
+              database: dbName,
+              connectTimeout: 2000,
+            });
+
+        const [rows]: any = await conn.query('SELECT id, credits FROM users WHERE google_id = ? OR email = ? LIMIT 1', [
+          userId,
+          userEmail,
+        ]);
+
+        if (rows && rows.length > 0) {
+          const current = Number(rows[0].credits);
+          if (current <= 0) {
+            await conn.end();
+            return res.status(403).json({
+              status: 'error',
+              message: 'INSUFFICIENT_CREDITS',
+              remaining_credits: 0,
+            });
+          }
+          remainingCredits = current - 1;
+          await conn.query('UPDATE users SET credits = ? WHERE id = ?', [remainingCredits, rows[0].id]);
+        }
+        await conn.end();
+      } catch (dbErr: any) {
+        console.warn('MySQL deduct skipped or failed, using session deduction:', dbErr?.message);
+      }
     }
 
     // Graph & Diagram visual prompt injection
@@ -343,7 +388,7 @@ export default async function handler(req: any, res: any) {
           const key = groqKeys[Math.floor(Math.random() * groqKeys.length)];
           try {
             const text = await callGroq(model.name, prompt, systemInstruction, image, mimeType, key);
-            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'groq', remaining_credits: creditResult.remaining_credits });
+            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'groq', remaining_credits: remainingCredits });
           } catch (err: any) {
             lastError = `Groq (${model.name}): ${err?.message || 'Failed'}`;
           }
@@ -353,7 +398,7 @@ export default async function handler(req: any, res: any) {
           const key = geminiKeys[Math.floor(Math.random() * geminiKeys.length)];
           try {
             const text = await callGoogleGemini(model.name, prompt, systemInstruction, image, mimeType, key);
-            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'google', remaining_credits: creditResult.remaining_credits });
+            return res.status(200).json({ status: 'success', text, model: model.name, provider: 'google', remaining_credits: remainingCredits });
           } catch (err: any) {
             lastError = `Google (${model.name}): ${err?.message || 'Failed'}`;
           }
@@ -361,14 +406,14 @@ export default async function handler(req: any, res: any) {
       } else if (model.provider === 'openrouter' && openRouterKey) {
         try {
           const text = await callOpenRouter(model.name, prompt, systemInstruction, image, mimeType, openRouterKey);
-          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'openrouter', remaining_credits: creditResult.remaining_credits });
+          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'openrouter', remaining_credits: remainingCredits });
         } catch (err: any) {
           lastError = `OpenRouter (${model.name}): ${err?.message || 'Failed'}`;
         }
       } else if (model.provider === 'huggingface' && huggingFaceKey) {
         try {
           const text = await callHuggingFace(model.name, prompt, systemInstruction, image, mimeType, huggingFaceKey);
-          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'huggingface', remaining_credits: creditResult.remaining_credits });
+          return res.status(200).json({ status: 'success', text, model: model.name, provider: 'huggingface', remaining_credits: remainingCredits });
         } catch (err: any) {
           lastError = `HuggingFace (${model.name}): ${err?.message || 'Failed'}`;
         }

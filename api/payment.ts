@@ -4,7 +4,6 @@
  */
 
 import crypto from 'crypto';
-import { addCredits } from './lib/db.ts';
 
 export const config = {
   maxDuration: 20,
@@ -111,12 +110,49 @@ export default async function handler(req: any, res: any) {
           } catch (_) {}
         }
 
-        const creditResult = await addCredits(userId || 'default', 100, razorpay_order_id, razorpay_payment_id);
+        let newCredits = 120;
+        const dbHost = process.env.DB_HOST;
+        const dbUser = process.env.DB_USER;
+        const dbPass = process.env.DB_PASS || process.env.DB_PASSWORD;
+        const dbName = process.env.DB_NAME;
+        const dbUrl = process.env.DATABASE_URL;
+
+        if ((dbUrl || (dbHost && dbUser && dbName)) && dbHost !== 'localhost' && dbHost !== '127.0.0.1') {
+          try {
+            const { default: mysql } = await import('mysql2/promise');
+            const conn = dbUrl
+              ? await mysql.createConnection(dbUrl)
+              : await mysql.createConnection({
+                  host: dbHost,
+                  user: dbUser,
+                  password: dbPass || '',
+                  database: dbName,
+                  connectTimeout: 2000,
+                });
+
+            const [rows]: any = await conn.query('SELECT id, credits FROM users WHERE id = ? OR google_id = ? LIMIT 1', [
+              userId,
+              userId,
+            ]);
+
+            if (rows && rows.length > 0) {
+              newCredits = Number(rows[0].credits) + 100;
+              await conn.query('UPDATE users SET credits = ? WHERE id = ?', [newCredits, rows[0].id]);
+              await conn.query(
+                'INSERT INTO payments (user_id, razorpay_order_id, razorpay_payment_id, amount, credits_added, status) VALUES (?, ?, ?, 99, 100, "paid")',
+                [rows[0].id, razorpay_order_id, razorpay_payment_id]
+              );
+            }
+            await conn.end();
+          } catch (dbErr: any) {
+            console.warn('MySQL payment credit update skipped or failed:', dbErr?.message);
+          }
+        }
 
         return res.status(200).json({
           status: 'success',
           message: 'Payment verified',
-          new_credits: creditResult.new_credits,
+          new_credits: newCredits,
         });
       } else {
         return res.status(400).json({ status: 'error', message: 'Invalid payment signature' });
