@@ -5,7 +5,7 @@
 [![GitHub Profile](https://img.shields.io/badge/GitHub-MohammedAyman07-181717?style=for-the-badge&logo=github)](https://github.com/MohammedAyman07)
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-Apache_2.0-22c55e.svg?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](LICENSE)
 
 > **Built & Engineered by [Mohammed Ayman S](https://www.linkedin.com/in/mohammed-ayman-s-661396289)**  
 > *Full-Stack Software Engineer & AI Systems Developer*
@@ -245,4 +245,4 @@ npm run build   # Production Vite bundle build
 
 ## 📄 License
 
-This project is open-source and distributed under the [Apache License 2.0](LICENSE).
+This project is proprietary and all rights are reserved. The source is publicly available for portfolio review only. See the [AYMAN Proprietary Portfolio Licence](LICENSE) for permitted use and restrictions.
