@@ -42,7 +42,7 @@ export default async function handler(req: any, res: any) {
       const amountInSmallestUnit = Math.round(baseAmount * 100);
 
       const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64');
-      const orderRes = await fetch('https://api.razorpay.com/v1/orders', {
+      let orderRes = await fetch('https://api.razorpay.com/v1/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,17 +55,37 @@ export default async function handler(req: any, res: any) {
         }),
       });
 
+      // If international currency failed (e.g. non-INR not enabled on merchant account), fallback to INR
+      if (!orderRes.ok && currency !== 'INR') {
+        const checkErr = await orderRes.clone().json().catch(() => null);
+        if (checkErr?.error?.description?.toLowerCase().includes('international') || orderRes.status === 400) {
+          orderRes = await fetch('https://api.razorpay.com/v1/orders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: authHeader,
+            },
+            body: JSON.stringify({
+              amount: 9900,
+              currency: 'INR',
+              receipt: `rcpt_${Date.now()}`,
+            }),
+          });
+        }
+      }
+
       if (!orderRes.ok) {
-        const errText = await orderRes.text();
-        console.error('Razorpay order creation failed:', errText);
+        const errJson = await orderRes.json().catch(() => null);
+        const description = errJson?.error?.description || 'Failed to create Razorpay Order. Verify RAZORPAY_KEY_ID & RAZORPAY_KEY_SECRET.';
+        console.error('Razorpay order creation failed:', description);
         return res.status(orderRes.status).json({
           status: 'error',
-          message: 'Failed to create Razorpay Order',
+          message: description,
         });
       }
 
       const orderData = await orderRes.json();
-      return res.status(200).json({ status: 'success', order: orderData });
+      return res.status(200).json({ status: 'success', order: orderData, key: keyId });
     } else if (action === 'verify_payment') {
       const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 

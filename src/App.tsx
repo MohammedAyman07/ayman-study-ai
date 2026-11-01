@@ -945,9 +945,9 @@ Rules:
       }
 
       const options = {
-        "key": (import.meta as any).env?.VITE_RAZORPAY_KEY_ID || "rzp_test_placeholder",
+        "key": data.key || (import.meta as any).env?.VITE_RAZORPAY_KEY_ID || "",
         "amount": data.order.amount,
-        "currency": currencyInfo.code,
+        "currency": data.order?.currency || currencyInfo.code,
         "name": "Ayman StudyAI",
         "description": "Buy 100 Credits",
         "order_id": data.order.id,
