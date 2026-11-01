@@ -117,7 +117,9 @@ flowchart TD
   1. **Order Creation:** Backend securely contacts Razorpay with basic auth credentials to create a verified `order_id` in paise/smallest currency unit.
   2. **Dynamic Public Key Injection:** Public keys are returned directly from the backend order response, decoupling frontend builds from hardcoded secrets.
   3. **Cryptographic HMAC-SHA256 Verification:** After user payment, the frontend passes `razorpay_order_id`, `razorpay_payment_id`, and `razorpay_signature` to the server. The server computes:
-     $$\text{Expected Signature} = \text{HMAC-SHA256}(\text{order\_id} \parallel \text{payment\_id}, \text{KEY\_SECRET})$$
+     ```text
+     Expected Signature = HMAC_SHA256(order_id + "|" + payment_id, RAZORPAY_KEY_SECRET)
+     ```
      Credits are credited **only if the generated hash matches the signature byte-for-byte**.
   4. **Currency Fallback:** Automatically catches Indian accounts attempting international currency (`USD`/`EUR`) orders and falls back to standard `INR` (₹99).
 
@@ -130,7 +132,7 @@ flowchart TD
 ### 4. Atomic Credit Economy & Dual-Persistence Engine
 * **The Problem:** Stateless serverless functions lose memory across invocations, which previously caused student credit counters to reset to default upon browser refresh.
 * **The Solution:**
-  * **Live Client Countdown:** Every request deducts exactly 1 credit ($$\text{credits}_{\text{new}} = \max(0, \text{credits}_{\text{old}} - 1)$$).
+  * **Live Client Countdown:** Every request deducts exactly 1 credit (`credits = Math.max(0, credits - 1)`).
   * **LocalStorage Syncing:** Synced React state with browser storage (`ayman_study_user`, `ayman_study_token`) so sessions and balances persist across tab closures and refreshes.
   * **MySQL Database Integration:** Designed [`database.sql`](backend/php/database.sql) with parameterized queries for persistent cloud storage:
     ```sql
@@ -238,7 +240,6 @@ npm run build   # Production Vite bundle build
 * 💼 **LinkedIn Profile:** [linkedin.com/in/mohammed-ayman-s-661396289](https://www.linkedin.com/in/mohammed-ayman-s-661396289)
 * 🐙 **GitHub Profile:** [@MohammedAyman07](https://github.com/MohammedAyman07)
 * 📧 **Email:** [mohammedayman0107@gmail.com](mailto:mohammedayman0107@gmail.com)
-* 🏢 **Portfolio:** [aymaninfotech.com](https://aymaninfotech.com)
 
 ---
 
