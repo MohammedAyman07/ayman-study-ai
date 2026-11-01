@@ -22,6 +22,11 @@ export function getDbPool(): mysql.Pool | null {
   const database = process.env.DB_NAME;
   const port = Number(process.env.DB_PORT) || 3306;
 
+  // On Vercel serverless, 'localhost' will never connect and would cause timeouts
+  if (host === 'localhost' || host === '127.0.0.1') {
+    return null;
+  }
+
   try {
     if (dbUrl) {
       pool = mysql.createPool({
@@ -29,6 +34,7 @@ export function getDbPool(): mysql.Pool | null {
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0,
+        connectTimeout: 3000,
         ssl: process.env.DB_SSL === 'false' ? undefined : { rejectUnauthorized: false },
       });
       return pool;
@@ -44,6 +50,7 @@ export function getDbPool(): mysql.Pool | null {
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0,
+        connectTimeout: 3000,
         ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
       });
       return pool;

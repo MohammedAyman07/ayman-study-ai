@@ -4,7 +4,7 @@
  */
 
 import crypto from 'crypto';
-import { addCredits } from './lib/db';
+import { addCredits } from './lib/db.ts';
 
 export const config = {
   maxDuration: 20,

@@ -3,7 +3,7 @@
  * Vercel Serverless Function (/api/chat)
  */
 
-import { deductCredit } from './lib/db';
+import { deductCredit } from './lib/db.ts';
 
 export const config = {
   maxDuration: 60,

@@ -3,7 +3,7 @@
  * Vercel Serverless Function (/api/auth)
  */
 
-import { findOrCreateUser } from './lib/db';
+import { findOrCreateUser } from './lib/db.ts';
 
 export const config = {
   maxDuration: 15,

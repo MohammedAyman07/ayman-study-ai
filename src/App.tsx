@@ -814,7 +814,7 @@ Rules:
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
         body: JSON.stringify({ prompt: quizTopic, systemInstruction: systemPrompt, image: null, mimeType: 'image/png' })
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
       if (data.status !== 'success') {
         if (data.message === 'INSUFFICIENT_CREDITS') { setShowUpgrade(true); setQuizPhase('setup'); return; }
         throw new Error(data.message || 'Failed to generate quiz');
@@ -941,15 +941,15 @@ Rules:
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential: credentialResponse.credential })
       });
-      const data = await res.json();
-      if (data.status === 'success') {
+      const data = await res.json().catch(() => null);
+      if (data && data.status === 'success') {
         setUser(data.user);
         setToken(data.token);
       } else {
-        alert(data.message || "Login failed");
+        alert(data?.message || ("Login failed (HTTP " + res.status + ")"));
       }
     } catch (err) {
-      alert("Login request failed");
+      alert("Login request failed: " + (err?.message || "Server error"));
     }
   };
 
@@ -971,7 +971,7 @@ Rules:
         },
         body: JSON.stringify({ action: 'create_order', amount: currencyInfo.amount, currency: currencyInfo.code }) // Dynamic currency top-up
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
 
       if (data.status !== 'success') {
         alert("Could not start payment: " + data.message);
@@ -1122,7 +1122,7 @@ Rules:
 
       const data = await response.json();
 
-      if (data.status === 'success') {
+      if (data && data.status === 'success') {
         setResult(fixMarkdownTables(data.text));
         // Decrease credit in state locally for snappiness
         setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
@@ -1191,7 +1191,7 @@ Rules:
 
       const data = await response.json();
 
-      if (data.status === 'success') {
+      if (data && data.status === 'success') {
         setChatHistory(prev => [...prev, { role: 'model', text: data.text }]);
         setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
         setTimeout(scrollToBottom, 100);
@@ -2613,8 +2613,8 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                         systemInstruction: SUMMARISE_SYSTEM
                       })
                     });
-                    const data = await res.json();
-                    if (data.status === 'success') {
+                    const data = await res.json().catch(() => null);
+                    if (data && data.status === 'success') {
                       setResult(data.text);
                       setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
                     } else if (data.message === 'INSUFFICIENT_CREDITS') {
