@@ -195,9 +195,36 @@ function fixMarkdownTables(text: string): string {
  * so that remark-math / KaTeX can process them correctly.
  */
 function fixLatex(text: string): string {
+  if (!text) return '';
+  let res = text;
+  // 1. Block math: \[ ... \] or \\\[ ... \\\]
+  res = res.replace(/\\{1,2}\[([\s\S]+?)\\{1,2}\]/g, (_m, g) => '\n\n$$\n' + g.trim() + '\n$$\n\n');
+  // 2. Inline math: \( ... \) or \\( ... \\)
+  res = res.replace(/\\{1,2}\(([\s\S]+?)\\{1,2}\)/g, (_m, g) => '$' + g.trim() + '$');
+  // 3. Parentheses containing LaTeX command or power/subscript: e.g. (2^{\kappa}>2^{\lambda}), (n^4 - 20n^2 + 4)
+  res = res.replace(/\(([^\n()]*?(?:\\[a-zA-Z]+|\^[0-9a-zA-Z{]|_[0-9a-zA-Z{])[^\n()]*?)\)/g, (_m, g) => '$' + g.trim() + '$');
+  // 4. Ensure $$ blocks have proper newline separation
+  res = res.replace(/\$\$\s*([\s\S]+?)\s*\$\$/g, (_m, g) => '\n\n$$\n' + g.trim() + '\n$$\n\n');
+  return res;
+}
+
+function cleanInputMath(text: string): string {
+  if (!text) return '';
   return text
-    .replace(/\\\((.+?)\\\)/gs, '$$$1$$')      // \(...\) → $...$
-    .replace(/\\\[(.+?)\\\]/gs, '$$$$\n$1\n$$$$'); // \[...\] → $$...$$
+    .replace(/\\{1,2}\(([\s\S]+?)\\{1,2}\)/g, '$1')
+    .replace(/\\{1,2}\[([\s\S]+?)\\{1,2}\]/g, '$1')
+    .replace(/\\le\b/g, '≤')
+    .replace(/\\ge\b/g, '≥')
+    .replace(/\\neq?\b/g, '≠')
+    .replace(/\\times\b/g, '×')
+    .replace(/\\pm\b/g, '±')
+    .replace(/\\approx\b/g, '≈')
+    .replace(/\\cdot\b/g, '·')
+    .replace(/\\in\b/g, '∈')
+    .replace(/\\infty\b/g, '∞')
+    .replace(/\\to\b/g, '→')
+    .replace(/\\forall\b/g, '∀')
+    .replace(/\\exists\b/g, '∃');
 }
 
 const BrandLogo = ({ className = "" }: { className?: string }) => (
@@ -1118,7 +1145,7 @@ Rules:
       const data = await response.json();
 
       if (data && data.status === 'success') {
-        setResult(fixMarkdownTables(data.text));
+        setResult(fixLatex(fixMarkdownTables(data.text)));
         // Decrease credit in state locally for snappiness
         setUser((prev: any) => {
         const cur = prev?.credits !== undefined ? prev.credits : 20;
@@ -1192,7 +1219,7 @@ Rules:
       const data = await response.json();
 
       if (data && data.status === 'success') {
-        setChatHistory(prev => [...prev, { role: 'model', text: data.text }]);
+        setChatHistory(prev => [...prev, { role: 'model', text: fixLatex(data.text) }]);
         setUser((prev: any) => {
         const cur = prev?.credits !== undefined ? prev.credits : 20;
         const next = data.remaining_credits !== undefined ? Math.min(data.remaining_credits, cur - 1) : cur - 1;
@@ -2231,7 +2258,7 @@ Rules:
                 <div className="premium-glass-card rounded-3xl p-7 md:p-9 mb-5">
                   <div className="text-xl md:text-2xl font-bold text-slate-900 leading-snug mb-8">
                     <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>
-                      {quizData[quizCurrent].question}
+                      {fixLatex(quizData[quizCurrent].question)}
                     </ReactMarkdown>
                   </div>
 
@@ -2271,7 +2298,7 @@ Rules:
                             {['A', 'B', 'C', 'D'][i]}
                           </span>
                           <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]} components={{ p: 'span' }}>
-                            {opt.replace(/^[A-D]\.\s*/, '')}
+                            {fixLatex(opt.replace(/^[A-D]\.\s*/, ''))}
                           </ReactMarkdown>
                           {revealed && isCorrect && <CheckCircle2 className="w-5 h-5 text-green-500 ml-auto" />}
                           {revealed && isSelected && !isCorrect && <X className="w-5 h-5 text-red-400 ml-auto" />}
@@ -2290,7 +2317,7 @@ Rules:
                         <p className="text-sm font-bold text-violet-700 mb-1">💡 Explanation</p>
                         <div className="text-sm text-violet-900">
                           <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>
-                            {quizData[quizCurrent].explanation}
+                            {fixLatex(quizData[quizCurrent].explanation)}
                           </ReactMarkdown>
                         </div>
                       </motion.div>
@@ -2690,7 +2717,7 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                               }
                             }}
                           >
-                            {sec.content}
+                            {fixLatex(sec.content)}
                           </ReactMarkdown>
                         </div>
                       </motion.div>
@@ -2825,10 +2852,12 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                       if (problem.trim() || image) solveProblem();
                     }
                   }}
-                  onPaste={(e: React.ClipboardEvent) => {
+                  onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
                     const items = e.clipboardData.items;
+                    let hasImage = false;
                     for (let i = 0; i < items.length; i++) {
                       if (items[i].type.indexOf('image') === 0) {
+                        hasImage = true;
                         e.preventDefault();
                         const blob = items[i].getAsFile();
                         if (blob) {
@@ -2837,6 +2866,23 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                           reader.readAsDataURL(blob);
                         }
                         break;
+                      }
+                    }
+                    if (!hasImage) {
+                      const text = e.clipboardData.getData('text');
+                      if (text && (/\\{1,2}[\(\[]/.test(text) || /\\(le|ge|neq?|times|pm|approx)\b/.test(text))) {
+                        e.preventDefault();
+                        const cleaned = cleanInputMath(text);
+                        const target = e.currentTarget;
+                        const start = target.selectionStart ?? 0;
+                        const end = target.selectionEnd ?? 0;
+                        const current = problem;
+                        const updated = current.substring(0, start) + cleaned + current.substring(end);
+                        setProblem(updated);
+                        setTimeout(() => {
+                          target.style.height = 'auto';
+                          target.style.height = Math.min(target.scrollHeight, 200) + 'px';
+                        }, 0);
                       }
                     }
                   }}
@@ -2858,6 +2904,24 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
               </div>
             </div>
 
+            {/* Formula Preview when problem contains math notation */}
+            {problem.trim() && (problem.includes('^') || problem.includes('_') || problem.includes('\\') || problem.includes('$') || problem.includes('≤') || problem.includes('≥')) && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-3 mx-1 p-3.5 bg-violet-50/70 border border-violet-100 rounded-2xl text-sm text-slate-800"
+              >
+                <div className="text-[11px] font-bold text-violet-600 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" /> Live Math Formula Preview:
+                </div>
+                <div className="overflow-x-auto markdown-body">
+                  <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>
+                    {fixLatex(problem)}
+                  </ReactMarkdown>
+                </div>
+              </motion.div>
+            )}
+
             {/* Under-bar hints */}
             <div className="mt-3 flex flex-col sm:flex-row items-center justify-between px-4 text-xs font-medium text-slate-400">
               <span>
@@ -2867,9 +2931,19 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                 <kbd className="font-sans px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">Enter</kbd>
                 {' '}for a new line
               </span>
-              <button onClick={clearAll} className="mt-2 sm:mt-0 flex items-center gap-1 hover:text-violet-500 transition-colors">
-                <X className="w-3 h-3" /> Clear
-              </button>
+              <div className="flex items-center gap-3">
+                {(problem.includes('\\(') || problem.includes('\\[') || /\\(le|ge|neq?|times|pm|approx)\b/.test(problem)) && (
+                  <button
+                    onClick={() => setProblem(cleanInputMath(problem))}
+                    className="flex items-center gap-1 text-violet-600 font-semibold hover:text-violet-700 bg-violet-50 px-2.5 py-1 rounded-full border border-violet-200/60 transition-all hover:bg-violet-100/60"
+                  >
+                    <Sparkles className="w-3 h-3" /> Clean Math Symbols
+                  </button>
+                )}
+                <button onClick={clearAll} className="mt-2 sm:mt-0 flex items-center gap-1 hover:text-violet-500 transition-colors">
+                  <X className="w-3 h-3" /> Clear
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2918,7 +2992,7 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                   return (
                     <div className="premium-glass-card rounded-3xl overflow-x-auto markdown-body handwritten-paper">
                       <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>
-                        {cleanedResult}
+                        {fixLatex(cleanedResult)}
                       </ReactMarkdown>
                     </div>
                   );
@@ -3004,7 +3078,7 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                                   }
                                 }}
                               >
-                                {section.content}
+                                {fixLatex(section.content)}
                               </ReactMarkdown>
                             </div>
                           </motion.div>
@@ -3094,7 +3168,7 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                                     }
                                   }}
                                 >
-                                  {msg.text}
+                                  {fixLatex(msg.text)}
                                 </ReactMarkdown>
                               </div>
                             </div>
