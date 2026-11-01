@@ -812,14 +812,18 @@ Rules:
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({ prompt: quizTopic, systemInstruction: systemPrompt, image: null, mimeType: 'image/png' })
+        body: JSON.stringify({ prompt: quizTopic, systemInstruction: systemPrompt, image: null, mimeType: 'image/png', credits: user?.credits })
       });
       const data = await res.json().catch(() => null);
-      if (data.status !== 'success') {
+      if (!data || data.status !== 'success') {
         if (data.message === 'INSUFFICIENT_CREDITS') { setShowUpgrade(true); setQuizPhase('setup'); return; }
         throw new Error(data.message || 'Failed to generate quiz');
       }
-      setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
+      setUser((prev: any) => {
+        const cur = prev?.credits !== undefined ? prev.credits : 20;
+        const next = data.remaining_credits !== undefined ? Math.min(data.remaining_credits, cur - 1) : cur - 1;
+        return { ...prev, credits: Math.max(0, next) };
+      });
       let rawText = (data.text as string).trim();
       // Strip markdown code fences if model wrapped in them
       rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
@@ -973,7 +977,7 @@ Rules:
       });
       const data = await res.json().catch(() => null);
 
-      if (data.status !== 'success') {
+      if (!data || data.status !== 'success') {
         alert("Could not start payment: " + data.message);
         return;
       }
@@ -1116,7 +1120,8 @@ Rules:
           image: base64Data,
           mimeType: extractedMimeType,
           subject: view,
-          rawProblem: problem
+          rawProblem: problem,
+          credits: user?.credits
         }),
       });
 
@@ -1125,7 +1130,11 @@ Rules:
       if (data && data.status === 'success') {
         setResult(fixMarkdownTables(data.text));
         // Decrease credit in state locally for snappiness
-        setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
+        setUser((prev: any) => {
+        const cur = prev?.credits !== undefined ? prev.credits : 20;
+        const next = data.remaining_credits !== undefined ? Math.min(data.remaining_credits, cur - 1) : cur - 1;
+        return { ...prev, credits: Math.max(0, next) };
+      });
       } else if (data.message === 'INSUFFICIENT_CREDITS') {
         setShowUpgrade(true);
         throw new Error("You have run out of credits.");
@@ -1186,6 +1195,7 @@ Rules:
           7. If a diagram is requested in chat, provide it as an SVG code block.
           8. If the student asks for a derivation, provide ONLY the step-by-step mathematical derivation.
           9. For Chemistry, do NOT provide EXPLANATION or EXTRA sections in your chat responses.`,
+          credits: user?.credits
         }),
       });
 
@@ -1193,7 +1203,11 @@ Rules:
 
       if (data && data.status === 'success') {
         setChatHistory(prev => [...prev, { role: 'model', text: data.text }]);
-        setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
+        setUser((prev: any) => {
+        const cur = prev?.credits !== undefined ? prev.credits : 20;
+        const next = data.remaining_credits !== undefined ? Math.min(data.remaining_credits, cur - 1) : cur - 1;
+        return { ...prev, credits: Math.max(0, next) };
+      });
         setTimeout(scrollToBottom, 100);
       } else if (data.message === 'INSUFFICIENT_CREDITS') {
         setShowUpgrade(true);
@@ -2610,13 +2624,18 @@ Give exactly 5 specific, actionable, numbered tips for this student to maximise 
                         prompt: finalPrompt,
                         image: base64Data,
                         mimeType: "image/png",
-                        systemInstruction: SUMMARISE_SYSTEM
+                        systemInstruction: SUMMARISE_SYSTEM,
+                        credits: user?.credits
                       })
                     });
                     const data = await res.json().catch(() => null);
                     if (data && data.status === 'success') {
                       setResult(data.text);
-                      setUser((prev: any) => ({ ...prev, credits: data.remaining_credits !== undefined ? data.remaining_credits : Math.max(0, prev.credits - 1) }));
+                      setUser((prev: any) => {
+        const cur = prev?.credits !== undefined ? prev.credits : 20;
+        const next = data.remaining_credits !== undefined ? Math.min(data.remaining_credits, cur - 1) : cur - 1;
+        return { ...prev, credits: Math.max(0, next) };
+      });
                     } else if (data.message === 'INSUFFICIENT_CREDITS') {
                       setShowUpgrade(true);
                     } else { throw new Error(data.message || 'Failed'); }

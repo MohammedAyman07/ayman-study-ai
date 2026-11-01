@@ -278,6 +278,10 @@ export default async function handler(req: any, res: any) {
       } catch (_) {}
     }
 
+    if (typeof (body as any)?.credits === 'number') {
+      userCredits = (body as any).credits;
+    }
+
     if (userCredits <= 0) {
       return res.status(403).json({
         status: 'error',
