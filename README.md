@@ -28,7 +28,7 @@
 3. [Deep-Dive: Technical Challenges & Solutions](#-technical-deep-dive--challenges-solved)
    * [1. Zero-Downtime Multi-Model AI Orchestrator](#1-zero-downtime-multi-model-ai-orchestration--failover)
    * [2. End-to-End Cryptographic Payment Processing (Razorpay)](#2-cryptographic-payment-gateway-integration-razorpay)
-   * [3. Secure Authentication & Recruiter Guest Access](#3-authentication-google-oauth-20--guest-demo)
+   * [3. Enterprise Authentication (Google OAuth 2.0)](#3-enterprise-authentication-google-oauth-20)
    * [4. Atomic Credit Economy & Dual-State Persistence](#4-atomic-credit-economy--dual-persistence-engine)
    * [5. Academic Solution Formatter with LaTeX & Mermaid.js](#5-pedagogical-rendering-engine-katex-latex--mermaidjs)
 4. [Technology Stack](#-technology-stack--skills-matrix)
@@ -43,7 +43,7 @@
 
 * 🔄 **Zero-Downtime Multi-Model AI Cascade:** Built a self-healing LLM orchestration engine in serverless TypeScript that rotates across **Groq LPUs**, **Google Gemini multimodal vision**, **OpenRouter**, and **Hugging Face**. If any provider suffers a 429 rate limit or outage, requests failover seamlessly in milliseconds without the user noticing.
 * 💳 **Cryptographic Payment Gateway (Razorpay):** End-to-end payment workflow with serverless order generation, dynamic currency detection (INR, USD, EUR via IP geolocation), and **cryptographic HMAC-SHA256 signature verification** before crediting accounts.
-* 🔐 **Enterprise Identity (Google OAuth 2.0 & Token Verification):** Server-side verification of Google ID tokens against Google’s official OAuth2 endpoints, paired with a custom base64 session token system and a **1-click Recruiter Demo access button** for zero-friction candidate review.
+* 🔐 **Enterprise Identity (Google OAuth 2.0 & Token Verification):** Server-side verification of Google ID tokens against Google’s official OAuth2 endpoints, paired with a custom base64 session token system and automated user credit provisioning.
 * ⚡ **Atomic Credit Economy (-1 Credit per Query):** Guaranteed subtraction across every single AI solve, chat query, quiz generation, and note summarizer with real-time UI badges, browser `localStorage` persistence, and optional MySQL database accounting.
 * 📐 **KaTeX Mathematical Typesetting & Dynamic Visuals:** Custom regex parsing pipeline that isolates display math blocks (`$$ ... $$`), renders formulas with KaTeX, and automatically prompts LLMs to generate valid Mermaid.js diagrams for circuits, graphs, and biology flowcharts.
 
@@ -123,11 +123,11 @@ flowchart TD
      Credits are credited **only if the generated hash matches the signature byte-for-byte**.
   4. **Currency Fallback:** Automatically catches Indian accounts attempting international currency (`USD`/`EUR`) orders and falls back to standard `INR` (₹99).
 
-### 3. Authentication: Google OAuth 2.0 & Guest Demo
-* **The Problem:** Recruiters and evaluators reviewing a portfolio repository often hesitate to link personal Google accounts just to test application features.
+### 3. Enterprise Authentication: Google OAuth 2.0
+* **The Problem:** Client-side OAuth implementations can be vulnerable to token forgery if user identity is trusted without server-side validation.
 * **The Solution:**
-  * **Production OAuth 2.0:** Integrated `@react-oauth/google` with a dedicated serverless authentication handler [`api/auth.ts`](api/auth.ts) that verifies tokens against Google's `https://oauth2.googleapis.com/tokeninfo` endpoint.
-  * **1-Click Recruiter Guest Access:** Added an instant "Guest Demo" button that provisions a temporary verified session with **20 complimentary credits**, allowing hiring managers to explore all features (Math Solver, Chemistry Derivations, AI Quiz) in 1 click.
+  * **Server-Side Token Verification:** Integrated `@react-oauth/google` with a dedicated serverless authentication handler [`api/auth.ts`](api/auth.ts) that verifies Google ID tokens directly against Google's official `https://oauth2.googleapis.com/tokeninfo` endpoint.
+  * **Automated Credit Provisioning:** Validated users are automatically provisioned with 20 initial free trial credits, with persistent session tokens and seamless MySQL account linking.
 
 ### 4. Atomic Credit Economy & Dual-Persistence Engine
 * **The Problem:** Stateless serverless functions lose memory across invocations, which previously caused student credit counters to reset to default upon browser refresh.

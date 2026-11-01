@@ -926,17 +926,7 @@ Rules:
       .catch(err => console.log('Location fetch failed, defaulting to INR', err));
   }, []);
 
-  const handleGuestLogin = () => {
-    const guestUser = {
-      id: 'guest_' + Date.now(),
-      name: 'Demo Student',
-      email: 'guest@aymanstudy.ai',
-      picture: '',
-      credits: 20,
-    };
-    setUser(guestUser);
-    setToken(btoa(JSON.stringify({ user_id: guestUser.id, email: guestUser.email, exp: Date.now() + 86400000 })));
-  };
+
 
   const handleLoginSuccess = async (credentialResponse: any) => {
     try {
@@ -1251,21 +1241,12 @@ Rules:
         {/* Right Side */}
         <div className="flex items-center gap-3">
           {!user ? (
-            <div className="flex items-center gap-2">
-              <GoogleLogin
+            <GoogleLogin
                 onSuccess={handleLoginSuccess}
                 onError={() => console.log('Login Failed')}
                 shape="pill"
                 size="medium"
               />
-              <button
-                onClick={handleGuestLogin}
-                className="px-3 py-1.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 hover:bg-violet-200 transition-colors border border-violet-200 shadow-sm cursor-pointer whitespace-nowrap"
-                title="Instant access for guests and recruiters"
-              >
-                Guest Demo
-              </button>
-            </div>
           ) : (
             <div className="flex items-center gap-2">
               {/* Credit Badge */}
